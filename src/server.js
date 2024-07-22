@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const Hapi = require('@hapi/hapi');
+const Jwt = require('@hapi/jwt');
 const notes = require('./api/notes');
 const NotesService = require('./services/postgres/NotesService');
 const NotesValidator = require('./validator/notes');
@@ -12,7 +13,6 @@ const authentications = require('./api/authentications');
 const AuthenticationsService = require('./services/postgres/AuthenticationsService');
 const TokenManager = require('./tokenize/TokenManager');
 const AuthenticationsValidator = require('./validator/authentications');
-const Jwt = require('@hapi/jwt');
 
 const init = async () => {
   const notesService = new NotesService();
@@ -28,7 +28,6 @@ const init = async () => {
       },
     },
   });
-
 
   await server.register([
     {
@@ -51,7 +50,7 @@ const init = async () => {
       },
     }),
   });
-  
+
   await server.register([
     {
       plugin: notes,
@@ -79,7 +78,6 @@ const init = async () => {
   ]);
 
   server.ext('onPreResponse', (request, h) => {
-
     const { response } = request;
 
     if (response instanceof ClientError) {
